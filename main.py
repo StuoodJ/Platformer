@@ -3,14 +3,17 @@ import pygame
 
 # pygame setup
 pygame.init()
-screen = pygame.display.set_mode((1280, 720))
+screen = pygame.display.set_mode((320, 180))
 clock = pygame.time.Clock()
 running = True
 dt = 0
 
 player_pos = pygame.Vector2(screen.get_width() / 2, screen.get_height() / 2)
-player = pygame.image.load('Assets\images\player\player_2')
-screen.blit(player, player_pos, (16, 16))
+playerimg = pygame.image.load('Assets\images\player\player_1.png')
+player = screen.blit(playerimg, player_pos)
+f = pygame.Rect(0, 160, 320, 20)
+rect = pygame.draw.rect(screen, "red", f)
+
 while running:
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
@@ -26,14 +29,18 @@ while running:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
     if keys[pygame.K_a]:
+        playerimg = pygame.image.load('Assets\images\player\player_4.png')
         player_pos.x -= 300 * dt
     if keys[pygame.K_d]:
+        playerimg = pygame.image.load('Assets\images\player\player_1.png')
         player_pos.x += 300 * dt
-
-    screen.blit(player, player_pos, (16, 16))
+    if not player.colliderect(rect):
+        player_pos.y += 75 * dt
+    else:
+        player_pos.y = player_pos.y
+    rect = pygame.draw.rect(screen, "red", f)
+    screen.blit(playerimg, player_pos)
     
     # flip() the display to put your work on screen
     pygame.display.flip()
